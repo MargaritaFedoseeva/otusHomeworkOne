@@ -4,6 +4,7 @@ import annotations.Path;
 import annotations.Template;
 import annotations.UrlTemplates;
 import com.google.inject.Inject;
+import di.Scoped;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,8 +18,8 @@ import java.util.stream.Collectors;
 public class LessonPage extends AbsBasePage<LessonPage> {
 
     @Inject
-    public LessonPage(WebDriver driver) {
-        super(driver);
+    public LessonPage(Scoped scoped) {
+        super(scoped);
 
     }
 

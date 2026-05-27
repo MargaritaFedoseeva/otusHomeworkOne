@@ -4,6 +4,7 @@ import annotations.Path;
 import annotations.Template;
 import annotations.UrlTemplates;
 import common.AbsCommon;
+import di.Scoped;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.WebDriver;
@@ -15,8 +16,8 @@ import java.util.Random;
 public abstract class AbsBasePage<T> extends AbsCommon {
     private final String baseUrl = System.getProperty("base.url");
 
-    public AbsBasePage(WebDriver driver) {
-        super(driver);
+    public AbsBasePage(Scoped scoped) {
+        super(scoped);
     }
 
 

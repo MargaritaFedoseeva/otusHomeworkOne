@@ -25,13 +25,21 @@
         <jsoup.version>1.22.1</jsoup.version>
         <browser.property>chrome</browser.property>
         <base.url.property>https://otus.ru</base.url.property>
-        <user.agent.property>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
-            Chrome/139.0.0.0 Safari/537.36
-        </user.agent.property>
         <lombok.version>1.18.46</lombok.version>
+        <cucumber.version>7.33.0</cucumber.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
-
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -40,7 +48,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
@@ -63,6 +70,25 @@
             <version>1.18.46</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-guice</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -83,7 +109,6 @@
                     <systemPropertyVariables>
                         <browser>${browser.property}</browser>
                         <base.url>${base.url.property}</base.url>
-                        <user.agent>${user.agent.property}</user.agent>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

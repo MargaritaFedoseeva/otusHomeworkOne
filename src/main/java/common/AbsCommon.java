@@ -1,5 +1,7 @@
 package common;
 
+import di.Scoped;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -19,17 +21,25 @@ public abstract class AbsCommon {
     protected Actions action;
     protected CommonWaiter waiter;
 
-    public AbsCommon(WebDriver driver) {
-        this.driver = driver;
-        this.action = new Actions(driver);
-        waiter = new CommonWaiter(driver);
+    public AbsCommon(Scoped scoped) {
+        this.driver = scoped.driver;
+        this.action = new Actions(scoped.driver);
+        waiter = new CommonWaiter(scoped.driver);
 
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(scoped.driver, this);
     }
 
-    protected void clickElementByPredicate(List<WebElement> elements, Predicate <WebElement> filter) {
-        for (WebElement element: elements){
-            if (filter.test(element)){
+    public List<WebElement> byWebElements(By selector) {
+        return driver.findElements(selector);
+    }
+
+    public WebElement by(By selector) {
+        return driver.findElement(selector);
+    }
+
+    protected void clickElementByPredicate(List<WebElement> elements, Predicate<WebElement> filter) {
+        for (WebElement element : elements) {
+            if (filter.test(element)) {
                 waiter.waitForCondition(ExpectedConditions.stalenessOf(element));
                 element.click();
             }
@@ -37,13 +47,13 @@ public abstract class AbsCommon {
         throw new AssertionError("Элемент по фильтру не найден на странице");
     }
 
-    protected void moveElement(WebElement element){
+    protected void moveElement(WebElement element) {
         action.moveToElement(element).perform();
     }
 
-    protected void moveElementByPredicate(List<WebElement> elements, Predicate <WebElement> filter) {
-        for (WebElement element: elements){
-            if (filter.test(element)){
+    protected void moveElementByPredicate(List<WebElement> elements, Predicate<WebElement> filter) {
+        for (WebElement element : elements) {
+            if (filter.test(element)) {
                 waiter.waitForCondition(ExpectedConditions.stalenessOf(element));
                 action.moveToElement(element).perform();
                 break;

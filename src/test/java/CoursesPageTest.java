@@ -28,7 +28,7 @@ public class CoursesPageTest {
     @Test
     public void openCourseCheckTitle() {
         coursesPage.open("");
-        coursesPage.openCourseTitle("Управление AI/ML-продуктом");
+        coursesPage.openFirstOneAvailableCourseTitle("Управление AI/ML-продуктом");
         assertEquals(lessonPage.getLessonTitle(), "Управление AI/ML-продуктом");
     }
 
@@ -38,7 +38,7 @@ public class CoursesPageTest {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM", new Locale("ru"));
         Document doc = coursesPage.getPage("");
 
-        List<Element> coursesDate = doc.select("div.sc-18q05a6-1.bwGwUO>a .ieVVRJ div");
+        List<Element> coursesDate = doc.select("div.bwGwUO>a .ieVVRJ div");
 
         Map<LocalDate, List<Element>> coursesMinDate = coursesPage.isMax(coursesDate, false);
         Map<LocalDate, List<Element>> coursesMaxDate = coursesPage.isMax(coursesDate, true);
@@ -53,7 +53,7 @@ public class CoursesPageTest {
         coursesFiltered.forEach((date, elements) -> {
             elements.forEach(element -> {
                 String courseName = element.parent().parent().parent().selectFirst("h6").text();
-                coursesPage.openCourseTitle(courseName); //открываем курс
+                coursesPage.openFirstOneAvailableCourseTitle(courseName); //открываем курс
                 assertEquals(courseName, lessonPage.getLessonTitle()); //проверяем название
                 assertEquals(date.format(formatter), lessonPage.getLessonStartDate()); //проверяем дату старта курса
                 coursesPage.open("");
