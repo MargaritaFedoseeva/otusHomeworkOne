@@ -3,19 +3,10 @@ package auto.steps;
 import com.google.inject.Inject;
 import di.Scoped;
 import io.cucumber.java.en.When;
-import models.Course;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainPageSteps {
-    @Inject
-    private BaseSteps browserSteps;
-    @Inject
-    private CoursesPage coursesPage;
 
     @Inject
     private MainPage mainPage;

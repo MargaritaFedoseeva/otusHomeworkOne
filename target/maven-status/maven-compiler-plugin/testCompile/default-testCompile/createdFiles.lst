@@ -1,2 +1,9 @@
-MainPageTest.class
+auto\steps\LessonPageSteps.class
+auto\steps\BrowserSteps.class
+auto\steps\CoursesPageSteps.class
+auto\hooks\Hooks.class
 CoursesPageTest.class
+auto\CucumberRunnerTest.class
+auto\steps\MainPageSteps.class
+MainPageTest.class
+auto\steps\BaseSteps.class
