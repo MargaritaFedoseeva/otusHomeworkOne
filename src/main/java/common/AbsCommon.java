@@ -61,10 +61,10 @@ public abstract class AbsCommon {
         }
     }
 
-    protected String randomClickWebElementGetText(List<WebElement> element) {
+    protected String randomClickWebElementGetText(List<WebElement> elements) {
         Random random = new Random();
-        int randomIndex = random.nextInt(element.size());
-        WebElement randomElement = element.get(randomIndex);
+        int randomIndex = random.nextInt(elements.size());
+        WebElement randomElement = elements.get(randomIndex);
         String textRandomElement = randomElement.getText();
         randomElement.click();
         return textRandomElement;

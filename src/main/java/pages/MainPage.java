@@ -1,10 +1,12 @@
 package pages;
 
+import annotations.Name;
 import annotations.Path;
 import annotations.Template;
 import annotations.UrlTemplates;
 import com.google.inject.Inject;
 import di.Scoped;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,14 +25,15 @@ public class MainPage extends AbsBasePage<MainPage> {
     }
 
     @FindBy(css = "span.cMNIlZ")
+    @Name("Раздел меню")
     private List<WebElement> listMenuHeader;
 
-    @FindBy(css = "div.cgYLnJ a.dZepSJ")
+    @FindBy(css = "div.iTRnIG div.cgYLnJ a")
     private List<WebElement> listCtgCourses;
 
-
-    public void moveToMenuHeader(String title) {
-        moveElementByPredicate(listMenuHeader, e -> title.equals(e.getText()));
+    public void moveToMenuItemWithText(String text) {
+       WebElement element = listMenuHeader.stream().filter(e -> e.getText().equals(text)).findFirst().orElse(null);
+       moveElement(element);
     }
 
     public String randomClickCtgCourseGetText() {

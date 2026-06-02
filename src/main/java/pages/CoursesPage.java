@@ -1,5 +1,6 @@
 package pages;
 
+import annotations.Name;
 import annotations.Path;
 import annotations.Template;
 import annotations.UrlTemplates;
@@ -27,20 +28,21 @@ public class CoursesPage extends AbsBasePage<CoursesPage> {
         super(scoped);
     }
 
-    @FindBy(css = "h6 div.jEGzDf")
+    @FindBy(css = ".bwGwUO h6 div.jEGzDf")
     private List<WebElement> listCoursesTitle;
-
 
     @FindBy(css = "button.cXVWAS")
     private WebElement btnShowMore;
-
 
     @FindBy(css = ".ieVVRJ div.jEGzDf")
     private List<WebElement> listCoursesDateInCatalog;
 
     @FindBy(xpath = "//p[text()='Направление']/../following-sibling::*//input/../..")
-    private List<WebElement> linkFilters;
+    private List<WebElement> linkFiltersDirection;
 
+    @FindBy(xpath = "//p[text()='Тип обучения']/../following-sibling::*//label")
+    @Name("Фильтры - Чекбокс Тип обучения")
+    private List<WebElement> linkFiltersTypeOfTraining;
 
     //реализация 1: поиск курсов, среди загруженных
     public List<WebElement> findCoursesByName(String courseName) {
@@ -91,7 +93,7 @@ public class CoursesPage extends AbsBasePage<CoursesPage> {
     }
 
     public void checkCtgCourses(String title) {
-        for (WebElement link : linkFilters) {
+        for (WebElement link : linkFiltersDirection) {
             String linkText = link.getText();
             String expectedTitle = title.split(" \\(")[0];
             boolean isSelected = Boolean.parseBoolean(link.getAttribute("value"));
@@ -133,7 +135,7 @@ public class CoursesPage extends AbsBasePage<CoursesPage> {
         System.out.println("Все доступные курсы успешно раскрыты.");
     }
 
-    public Map<LocalDate, List<Element>> onOfAfterDateStartCurses(List<Element> elements, LocalDate date) {
+    public Map<LocalDate, List<Element>> onOfAfterDateStartCourses(List<Element> elements, LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM, yyyy", new Locale("ru"));
 
         Map<LocalDate, List<Element>> groupedMap = elements.stream()

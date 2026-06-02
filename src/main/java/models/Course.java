@@ -10,5 +10,5 @@ import java.time.LocalDate;
 public class Course {
     private String title;
     private LocalDate date;
-    private int price;
+    private String price;
 }

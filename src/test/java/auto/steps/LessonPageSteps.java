@@ -2,7 +2,6 @@ package auto.steps;
 
 import com.google.inject.Inject;
 import io.cucumber.java.en.Then;
-import pages.CoursesPage;
 import pages.LessonPage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

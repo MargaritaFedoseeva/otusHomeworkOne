@@ -3,7 +3,8 @@ package auto.steps;
 import com.google.inject.Inject;
 import di.Scoped;
 import factory.DriverFactory;
-import io.cucumber.java.ru.Допустим;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 
 public class BrowserSteps {
     private Scoped scoped;
@@ -15,10 +16,14 @@ public class BrowserSteps {
         this.scoped = scoped;
     }
 
-    @Допустим("я открываю браузер Chrome")
+    @Given("я открываю браузер Chrome")
     public void openBrowserChrome() {
         scoped.driver = driverFactory.create();
         scoped.driverFactory = driverFactory;
     }
 
+    @When("вернуться на предыдущую страницу")
+    public void returnToPreviousPage() {
+        scoped.driver.navigate().back();
+    }
 }

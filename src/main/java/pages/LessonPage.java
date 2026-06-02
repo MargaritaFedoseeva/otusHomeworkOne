@@ -5,12 +5,10 @@ import annotations.Template;
 import annotations.UrlTemplates;
 import com.google.inject.Inject;
 import di.Scoped;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/")
 @UrlTemplates(

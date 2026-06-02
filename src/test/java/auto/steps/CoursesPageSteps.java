@@ -8,8 +8,11 @@ import models.Course;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import pages.CoursesPage;
 import pages.LessonPage;
+import pages.OnlineLessonPage;
+import pages.PageManager;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,12 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class CoursesPageSteps {
-
+    @Inject
+    private BaseSteps browserSteps;
     @Inject
     private CoursesPage coursesPage;
 
     @Inject
     private LessonPage lessonPage;
+
+    @Inject
+    private OnlineLessonPage onlineLessonPage;
 
     private Scoped scoped;
 
@@ -39,6 +46,8 @@ public class CoursesPageSteps {
     @When("открыта страница курсов")
     public void openCoursesPage() {
         coursesPage.open("");
+        scoped.pageManager = new PageManager();
+        scoped.pageManager.setCurrentPage(coursesPage);
     }
 
     @When("открыть первый попавшийся курс с названием {string}")
@@ -125,7 +134,7 @@ public class CoursesPageSteps {
 
         List<Element> coursesDate = doc.select("div.bwGwUO>a .ieVVRJ div");
 
-        Map<LocalDate, List<Element>> coursesFiltered = coursesPage.onOfAfterDateStartCurses(coursesDate, dateValue);
+        Map<LocalDate, List<Element>> coursesFiltered = coursesPage.onOfAfterDateStartCourses(coursesDate, dateValue);
 
         System.out.println(String.format("Курсы, стартующие в указанную дату \"%s\" г. или позже указанной даты:",
                 value));
@@ -141,6 +150,65 @@ public class CoursesPageSteps {
         } else {
             System.out.println("курсов не найдено");
         }
+    }
+
+    @Then("сохранить информацию по всем курсам")
+    public void saveCoursesInfoOpenCardCourse() {
+        Document docCoursesPage = coursesPage.getPage();
+
+        scoped.courses = new ArrayList<>();
+
+        List<Element> courses = docCoursesPage.select(".bwGwUO h6 div.jEGzDf");
+        for (Element course : courses) {
+            String hrefOnlineLesson = course.parent().parent().attr("href").replace("/online/", "");
+            Document doc = onlineLessonPage.getPage(hrefOnlineLesson.replace("/", ""));
+            scoped.courses.add(Course.builder()
+                    .title(course.text())
+                    .price(doc.selectXpath("//div[contains(., '₽') and (contains(@class, 'gztHyx') or contains(@class, 'tn-atom'))]").first().text())
+                    .build());
+        }
+    }
+
+    @Then("найти самый дорогой курс")
+    public void maxPriceCourse() {
+        double maxPrice = scoped.courses.stream()
+                .mapToDouble(c -> parsePrice(c.getPrice()))
+                .max()
+                .orElse(0.0);
+
+        List<Course> expensiveCourseCard = scoped.courses.stream().filter(c -> parsePrice(c.getPrice()) == maxPrice).toList();
+
+        System.out.println("\nИнформация по самым дорогим курсам:");
+        for (Course course : expensiveCourseCard) {
+            System.out.println(String.format("Название \"%s\", цена %s руб.",
+                    course.getTitle(), course.getPrice()));
+        }
+    }
+
+    @Then("найти самый дешевый курс")
+    public void minPriceCourse() {
+        double minPrice = scoped.courses.stream()
+                .mapToDouble(c -> parsePrice(c.getPrice()))
+                .min()
+                .orElse(0.0);
+
+        List<Course> cheapestCourseCard = scoped.courses.stream().filter(c -> parsePrice(c.getPrice()) == minPrice).toList();
+
+        System.out.println("\nИнформация по самым дешевым курсам:");
+        for (Course course : cheapestCourseCard) {
+            System.out.println(String.format("Название \"%s\", цена %s руб.",
+                    course.getTitle(), course.getPrice()));
+        }
+    }
+
+    @Then("открыт каталог курсов верной категории")
+    public void courseCategorySelected() {
+        coursesPage.checkCtgCourses(scoped.ctgCourse);
+    }
+
+    private double parsePrice(String priceText) {
+        String cleanPrice = priceText.replaceAll("[^0-9.,]", "").replace(",", ".");
+        return cleanPrice.isEmpty() ? 0.0 : Double.parseDouble(cleanPrice);
     }
 
 }
